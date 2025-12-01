@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Git version') {
+        stage('Git versiaaon') {
             steps {
                 sh 'git version'
             }
