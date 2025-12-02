@@ -24,6 +24,12 @@ pipeline {
             }
             }
 }
+stage('Build JAR') {
+    steps {
+        sh 'mvn clean package -DskipTests'
+	sh 'archive targer/*.jar'
+    }
+}
 	   stage('Docker Build and Push') {
      steps {
        withDockerRegistry([credentialsId: "dockerhub-config", url: ""]) {
