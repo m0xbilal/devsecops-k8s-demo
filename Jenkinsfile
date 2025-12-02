@@ -33,6 +33,7 @@ stage('Build JAR') {
      steps {
        withDockerRegistry([credentialsId: "dockerhub-config", url: ""]) {
         sh 'printenv'
+	sh 'docker login --username 0xbilaal'
  	 sh 'sudo docker build --no-cache -t 0xbilaal/numeric-app:""$GIT_COMMIT"" .'
          sh 'docker push 0xbilaal/numeric-app:""$GIT_COMMIT""'
        }
