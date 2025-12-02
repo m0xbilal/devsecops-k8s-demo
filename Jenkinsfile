@@ -29,14 +29,13 @@ stage('Build JARR') {
         sh 'mvn clean package -DskipTests'
     }
 }
-	   stage('Docker Build and Push') {
-     steps {
-       withDockerRegistry([credentialsId: "dockerhub-config", url: ""]) {
-        sh 'printenv'
- 	 sh 'sudo docker build --no-cache -t 0xbilaal/numeric-app:""$GIT_COMMIT"" .'
-         sh 'docker push 0xbilaal/numeric-app:""$GIT_COMMIT""'
-       }
-    }
+	   stage('Kubernetes Deployment - DEV') {
+      steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh 'sed -i "s#replace#0xbilaal/numeric-app:${GIT_COMMIT}#g" k8s_deployment_service.yaml'
+          sh 'kubectl apply -f k8s_deployment_service.yaml'
         }
+      }
+    }
     }
 }
