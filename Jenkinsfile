@@ -31,7 +31,7 @@ stage('Build JARR') {
 }
 		stage('Sonarqube - SAST') {
     steps {
-        sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://43.205.114.108:9000 -Dsonar.token=sqp_9ce582e3fb7a462e2d8235a5017831cbea9c54da'
+        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://43.205.114.108:9000 -Dsonar.token=sqp_9ce582e3fb7a462e2d8235a5017831cbea9c54da"
     }
 }
 
