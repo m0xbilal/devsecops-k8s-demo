@@ -41,8 +41,8 @@ stage('Build JARR') {
 }
 
 
-		// stage('Vulnerability Scan - Docker') {
- //      steps {
+ stage('Vulnerability Scan - Docker') {
+     steps {
  
         		sh "mvn dependency-check:check"	
       	}
@@ -52,6 +52,7 @@ stage('Build JARR') {
 }
 }
      }
+}
 
 
 	   stage('Kubernetes Deployment - DEV') {
