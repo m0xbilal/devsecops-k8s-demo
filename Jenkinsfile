@@ -41,7 +41,7 @@ stage('Build JARR') {
 }
 
 
- stage('Vulnerability Scan - Docker') {
+ stage('Vulnerability Scan - Dockerr') {
      steps {
  
         		sh "mvn dependency-check:check"	
