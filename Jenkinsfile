@@ -40,6 +40,20 @@ stage('Build JARR') {
 }
 }
 
+
+		// stage('Vulnerability Scan - Docker') {
+ //      steps {
+ 
+        		sh "mvn dependency-check:check"	
+      	}
+	post{
+			always{
+				dependencyCheckPublisher pattern: 'target/dependence-check-report.xml'~
+}
+}
+     }
+
+
 	   stage('Kubernetes Deployment - DEV') {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig']) {
