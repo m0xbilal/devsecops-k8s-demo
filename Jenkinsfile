@@ -31,8 +31,8 @@ stage('Build JARR') {
 }
 		stage('Sonarqube - SAST') {
     steps {
-	withSonarQubeEnv('Sonar-qube-auth-token'){
-        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://3.108.66.195:9000 -Dsonar.token=squ_430c3c52c515e1047556eaf0a80e4e50d6883503"
+	withSonarQubeEnv('SonarQube'){
+        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://3.108.66.195:9000 -Dsonar.token=squ_8b7afd448d51e5347aa197767b16942655fb666d"
     }
  timeout(time: 1, unit: 'HOURS') {
           waitForQualityGate abortPipeline: true
@@ -55,7 +55,7 @@ stage('Build JARR') {
 
 
 
-	   stage('Kubernetes Deployment - DEVV') {
+	   stage('Kubernetes Deployment - DEV') {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig']) {
           sh 'sed -i "s#replace#0xbilaal/numeric-app:50e6f0c54490743a2a1070b8f5822a3e7580dfa8#g" k8s_deployment_service.yaml'
