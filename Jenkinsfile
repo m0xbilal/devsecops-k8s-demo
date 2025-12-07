@@ -31,7 +31,7 @@ stage('Build JARR') {
 }
 		stage('Sonarqube - SAST') {
     steps {
-	withSonarQubeEnv('SonarQube'){
+	withSonarQubeEnv('Sonar-qube-auth-token'){
         sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://3.108.66.195:9000 -Dsonar.token=squ_430c3c52c515e1047556eaf0a80e4e50d6883503"
     }
  timeout(time: 1, unit: 'HOURS') {
