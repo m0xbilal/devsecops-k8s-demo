@@ -48,7 +48,7 @@ stage('Build JARR') {
       	}
 	post{
 			always{
-				dependencyCheckPublisher pattern: 'target/dependence-check-report.xml'
+				dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
 }
 }
      }
