@@ -47,7 +47,7 @@ stage('Build JARR') {
  			sh "bash trivy-docker-image-scan.sh"
       }
     }
-
+}
 
 
 	   stage('Kubernetes Deployment - DEV') {
