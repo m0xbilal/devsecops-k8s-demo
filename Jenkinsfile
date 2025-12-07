@@ -60,8 +60,8 @@ stage('Build JARR') {
    //     		sh "mvn dependency-check:check"	
      // 	}
 	// post{
-			always{
-				dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+		//	always{
+		//		dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
 // }
 // }
    //  }
