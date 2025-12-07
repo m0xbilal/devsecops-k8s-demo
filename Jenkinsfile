@@ -32,7 +32,7 @@ stage('Build JARR') {
 		stage('Sonarqube - SAST') {
     steps {
 	withSonarQubeEnv('SonarQube'){
-        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://3.108.66.195:9000 -Dsonar.token=sqp_9ce582e3fb7a462e2d8235a5017831cbea9c54da"
+        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application -Dsonar.projectName='numeric-application' -Dsonar.host.url=http://3.108.66.195:9000 -Dsonar.token=squ_430c3c52c515e1047556eaf0a80e4e50d6883503"
     }
  timeout(time: 1, unit: 'HOURS') {
           waitForQualityGate abortPipeline: true
