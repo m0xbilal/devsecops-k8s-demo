@@ -67,7 +67,7 @@ stage('Build JARR') {
       }
     }
 
-stage('Vulnerability Scan - Kubernetes') {
+stage('Vulnerability Scan - Kubernetess') {
   steps {
     sh '''
       mkdir -p ./tmp-conftest
