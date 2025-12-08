@@ -73,8 +73,8 @@ stage('Vulnerability Scan - Kubernetess') {
 mkdir -p /tmp/conftest
 
 echo "Copying files..."
-cp k8s_deployment_service.yaml /tmp/conftest/ || echo "YAML missing!"
-cp opa-k8s-security.rego /tmp/conftest/ || echo "REGO missing!"
+cp k8s_deployment_service.yaml /tmp/conftest/
+cp opa-k8s-security.rego /tmp/conftest/
 
 echo "Checking tmp directory..."
 ls -l /tmp/conftest
@@ -83,7 +83,8 @@ echo "Running Conftest..."
 docker run --rm \
   -v /tmp/conftest:/project \
   openpolicyagent/conftest test \
-  --policy /project/opa-k8s-security.rego \
+  --input k8s \
+  --policy /project \
   /project/k8s_deployment_service.yaml
 
     '''
