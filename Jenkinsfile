@@ -88,5 +88,5 @@ stage('Build JARR') {
         }
       }
     }
-    }$GIT_COMMIT
+    }
 }
