@@ -71,27 +71,18 @@ stage('Build JARR') {
 stage('Vulnerability Scan - Kubernetes') {
   steps {
     sh '''
-      echo "Current directory:"
+      echo "==== WORKSPACE ===="
       pwd
-
-      echo "Files in workspace:"
-      ls -R
-
-      mkdir -p /tmp/conftest
-
-      # Copy files if they exist
-      cp k8s_deployment_service.yaml /tmp/conftest/ || { echo "YAML missing!"; exit 1; }
-      cp opa-k8s-security.rego /tmp/conftest/ || { echo "REGO missing!"; exit 1; }
+      ls -l
 
       docker run --rm \
-        -v /tmp/conftest:/project \
+        -v $(pwd):/project \
         openpolicyagent/conftest test \
         --policy /project/opa-k8s-security.rego \
         /project/k8s_deployment_service.yaml
     '''
   }
 }
-
 
 	   stage('Kubernetes Deployment - DEV') {
       steps {
