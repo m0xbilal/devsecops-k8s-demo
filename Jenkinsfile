@@ -47,12 +47,18 @@ stage('Build JARR') {
 			"Trivy Scan":{
 				sh "bash trivy-docker-image-scan.sh"
 			},
-			"OPA Conftest":{
-				sh 'docker info'
-	sh 'cp Dockerfile /tmp/'
-        sh 'cp opa-docker-security.rego /tmp/'
-				sh 'docker run --rm -v /tmp:/project openpolicyagent/conftest test --policy opa-docker-security.rego /project/Dockerfile'
-			}   	
+			"OPA Conftest": {
+    sh 'docker info'
+    sh 'cp Dockerfile /tmp/'
+    sh 'cp opa-docker-security.rego /tmp/'
+    sh '''
+      docker run --rm \
+      -v /tmp:/project \
+      openpolicyagent/conftest test \
+      --policy /project/opa-docker-security.rego \
+      /project/Dockerfile
+    '''
+} 	
       	)
 
  			
