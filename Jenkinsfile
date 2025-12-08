@@ -1,6 +1,15 @@
 pipeline {
     agent any
 
+	environment {
+        deploymentName = 'devsecops'
+        containerName  = 'devsecops-container'
+        serviceName    = 'devsecops-svc'
+        imageName      = "0xbilaal/numeric-app:${GIT_COMMIT}"
+        applicationURL = 'http://3.108.66.195/'
+        applicationURI = '/increment/99'
+    }
+
     stages {
         stage('Git versiaaon') {
             steps {
@@ -67,23 +76,21 @@ stage('Build JARR') {
       }
     }
 
-stage('Vulnerability Scan - Kubernetess') {
-  steps {
-    sh '''
-mkdir -p /tmp/conftest
-
-cp k8s_deployment_service.yaml /tmp/conftest/
-cp opa-k8s-security.rego /tmp/conftest/
-
-ls -l /tmp/conftest
-
-
-docker run --rm -v /tmp/conftest:/project openpolicyagent/conftest test \
-  --policy /project \
-  /project/k8s_deployment_service.yaml
-
-    '''
-  }
+stage('K8S Deployment - DEV') {
+    steps {
+        parallel(
+            Deployment: {
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh 'bash k8s-deployment.sh'
+                }
+            },
+            Rollout_Status: {
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh 'bash k8s-deployment-rollout-status.sh'
+                }
+            }
+        )
+    }
 }
 
 	   stage('Kubernetes Deployment - DEV') {
