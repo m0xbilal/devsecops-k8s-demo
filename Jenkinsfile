@@ -41,7 +41,7 @@ stage('Build JARR') {
 }
 
 
-	 stage('Vulnerability Scan - Dockerr') {
+	 stage('Vulnerability Scan - Docker') {
        steps {
 		parallel(
 			"Trivy Scan":{
