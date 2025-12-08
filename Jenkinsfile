@@ -48,6 +48,7 @@ stage('Build JARR') {
 				sh "bash trivy-docker-image-scan.sh"
 			},
 			"OPA Conftest":{
+				sh 'docker info'
 				sh 'docker run --rm -v \$WORKSPACE:/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
 			}   	
       	)
