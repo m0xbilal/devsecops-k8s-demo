@@ -57,14 +57,36 @@ stage('Build JARR') {
 
     }
 
+     stage('Docker Build and Push') {
+       steps {
+       withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+          sh 'printenv'
+          sh 'sudo docker build -t 0xbilaal/numeric-app:""$GIT_COMMIT"" .'
+          sh 'docker push 0xbilaal/numeric-app:""$GIT_COMMIT""'
+        }
+      }
+    }
+
+
+	 stage('Vulnerability Scan - Kubernetes') {
+      steps {
+        sh '''\
+          docker run --rm \
+            -v $(pwd):/project \
+            openpolicyagent/conftest test \
+            --policy opa-k8s-security.rego \
+            k8s_deployment_service.yaml
+        '''
+      }
+    }
 
 	   stage('Kubernetes Deployment - DEV') {
       steps {
         withKubeConfig([credentialsId: 'kubeconfig']) {
-          sh 'sed -i "s#replace#0xbilaal/numeric-app:50e6f0c54490743a2a1070b8f5822a3e7580dfa8#g" k8s_deployment_service.yaml'
+          sh 'sed -i "s#replace#0xbilaal/numeric-app:${GIT_COMMIT}#g" k8s_deployment_service.yaml'
           sh 'kubectl apply -f k8s_deployment_service.yaml'
         }
       }
     }
-    }
+    }$GIT_COMMIT
 }
