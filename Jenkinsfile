@@ -72,18 +72,13 @@ stage('Vulnerability Scan - Kubernetess') {
     sh '''
 mkdir -p /tmp/conftest
 
-echo "Copying files..."
 cp k8s_deployment_service.yaml /tmp/conftest/
 cp opa-k8s-security.rego /tmp/conftest/
 
-echo "Checking tmp directory..."
 ls -l /tmp/conftest
 
-echo "Running Conftest..."
-docker run --rm \
-  -v /tmp/conftest:/project \
-  openpolicyagent/conftest test \
-  --input k8s \
+
+docker run --rm -v /tmp/conftest:/project openpolicyagent/conftest test \
   --policy /project \
   /project/k8s_deployment_service.yaml
 
