@@ -68,16 +68,21 @@ stage('Build JARR') {
     }
 
 
-	stage('Vulnerability Scan - Kubernetes') {
+stage('Vulnerability Scan - Kubernetes') {
   steps {
     sh '''
+      echo "Current directory:"
+      pwd
+
+      echo "Files in workspace:"
+      ls -R
+
       mkdir -p /tmp/conftest
 
-      # Copy files Jenkins workspace → writable location
-      cp k8s_deployment_service.yaml /tmp/conftest/
-      cp opa-k8s-security.rego /tmp/conftest/
+      # Copy files if they exist
+      cp k8s_deployment_service.yaml /tmp/conftest/ || { echo "YAML missing!"; exit 1; }
+      cp opa-k8s-security.rego /tmp/conftest/ || { echo "REGO missing!"; exit 1; }
 
-      # Run Conftest
       docker run --rm \
         -v /tmp/conftest:/project \
         openpolicyagent/conftest test \
@@ -86,6 +91,7 @@ stage('Build JARR') {
     '''
   }
 }
+
 
 	   stage('Kubernetes Deployment - DEV') {
       steps {
