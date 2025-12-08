@@ -70,15 +70,15 @@ stage('Build JARR') {
 stage('Vulnerability Scan - Kubernetess') {
   steps {
     sh '''
-      mkdir -p ./tmp-conftest
-      cp k8s_deployment_service.yaml ./tmp-conftest/
-      cp opa-k8s-security.rego ./tmp-conftest/
+  mkdir -p /tmp/conftest
+cp k8s_deployment_service.yaml /tmp/conftest/
+cp opa-k8s-security.rego /tmp/conftest/
 
-      docker run --rm \
-        -v $(pwd)/tmp-conftest:/project \
-        openpolicyagent/conftest test \
-        --policy /project/opa-k8s-security.rego \
-        /project/k8s_deployment_service.yaml
+docker run --rm \
+  -v /tmp/conftest:/project \
+  openpolicyagent/conftest test \
+  --policy /project/opa-k8s-security.rego \
+  /project/k8s_deployment_service.yaml
     '''
   }
 }
