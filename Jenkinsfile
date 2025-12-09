@@ -86,7 +86,7 @@ stage('Build JARR') {
            },
          "Trivy Scan": {
 	    sh 'ls -la'	
-           // sh "bash trivy-k8s-scan.sh"
+            sh "bash trivy-k8s-scan.sh"
            }
          )
        }
