@@ -125,11 +125,10 @@ stage('K8S Deployment - DEV') {
          }
        }
      }
-
+}
 	post {
 	always {
 publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-}
 }
     }
 }
