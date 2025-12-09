@@ -78,19 +78,41 @@ stage('Build JARR') {
       }
     }
 
-     stage('Vulnerability Scan - Kubernetes') {
-       steps {
-         parallel(
-           "Kubesec Scan": {
-             sh "bash kubesec-scan.sh"
-           },
-         "Trivy Scan": {
-	    sh 'ls -la'	
-            sh "bash trivy-k8s-scan.sh"
-           }
-         )
-       }
-     }
+  stage('Vulnerability Scan - Kubernetes') {
+    steps {
+        parallel(
+            "Kubesec Scan": {
+                sh "bash kubesec-scan.sh"
+            },
+            "Trivy Scan": {
+                sh """
+echo "Image Name: $imageName"
+
+# Run Trivy scans
+docker run --rm -v $WORKSPACE:/root/.cache/ \
+    aquasec/trivy:latest -q image --exit-code 0 \
+    --severity LOW,MEDIUM,HIGH --light $imageName
+
+docker run --rm -v $WORKSPACE:/root/.cache/ \
+    aquasec/trivy:latest -q image --exit-code 1 \
+    --severity CRITICAL --light $imageName
+
+# Trivy scan result processing
+exit_code=\$?
+echo "Exit Code: \$exit_code"
+
+if [ "\$exit_code" -eq 1 ]; then
+    echo "Image scanning failed. Vulnerabilities found"
+    exit 1
+else
+    echo "Image scanning passed. No vulnerabilities found"
+fi
+"""
+            }
+        )
+    }
+}
+
 
 stage('K8S Deployment - DEV') {
     steps {
