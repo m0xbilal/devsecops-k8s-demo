@@ -66,6 +66,8 @@ stage('Build JARR') {
 
     }
 
+
+
      stage('Docker Build and Push') {
        steps {
        withDockerRegistry([credentialsId: "dockerhub-config", url: ""]) {
@@ -75,6 +77,20 @@ stage('Build JARR') {
         }
       }
     }
+
+     stage('Vulnerability Scan - Kubernetes') {
+       steps {
+         parallel(
+           "Kubesec Scan": {
+             sh "bash kubesec-scan.sh"
+           },
+         "Trivy Scan": {
+	    sh 'ls -la'	
+           // sh "bash trivy-k8s-scan.sh"
+           }
+         )
+       }
+     }
 
 stage('K8S Deployment - DEV') {
     steps {
