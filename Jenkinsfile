@@ -129,6 +129,12 @@ stage('K8S Deployment - DEV') {
          }
        }
      }
+
+stage('Reload Library') {
+    steps {
+        library 'slack@main'
+    }
+}
 }
 	post {
 	always {
