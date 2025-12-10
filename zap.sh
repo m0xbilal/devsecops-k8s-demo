@@ -7,7 +7,7 @@ chmod 777 $(pwd)
 echo $(id -u):$(id -g)
 # docker run -v $(pwd):/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap-api-scan.py -t $applicationURL:$PORT/v3/api-docs -f openapi -r zap_report.html
 
-
+cp zap_rules /tmp/
 # comment above cmd and uncomment below lines to run with CUSTOM RULES
 docker run -v /tmp:/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap-api-scan.py -t $applicationURL:$PORT/v3/api-docs -f openapi -c zap_rules -r zap_report.html
 
@@ -16,7 +16,7 @@ exit_code=$?
 
 # HTML Report
  sudo mkdir -p /tmp/owasp-zap-report
- sudo mv zap_report.html /tmp/owasp-zap-report
+ sudo mv /tmp/zap_report.html /tmp/owasp-zap-report
 
 
 echo "Exit Code : $exit_code"
