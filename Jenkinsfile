@@ -121,7 +121,7 @@ stage('K8S Deployment - DEV') {
       }
     }
 
-    stage('OWASP ZAP - DAST') {
+    stage('OWASP ZAP - DASTT') {
        steps {
          withKubeConfig([credentialsId: 'kubeconfig']) {
            // sh 'bash zap.sh' 
