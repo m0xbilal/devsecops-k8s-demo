@@ -1,3 +1,6 @@
+@Library('slack') _
+
+
 pipeline {
     agent any
 
@@ -128,7 +131,9 @@ stage('K8S Deployment - DEV') {
 }
 	post {
 	always {
-publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: '/tmp/owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+sendNotification currentBuild.result
+// publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: '/tmp/owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'HTML Report', 
+// reportTitles: '', useWrapperFileDirectly: true])
 }
     }
 }
