@@ -14,6 +14,12 @@ pipeline {
     }
 
     stages {
+
+ stage('Slack Test') {
+            steps {
+                slackSend(channel: '#jenkins', message: 'Jenkins Slack test message 🤖')
+            }
+        }
         stage('Git versiaaon') {
             steps {
                 sh 'git version'
