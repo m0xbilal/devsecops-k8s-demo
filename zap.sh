@@ -15,6 +15,9 @@ exit_code=$?
 
 
 # HTML Report
+ sudo mkdir -p /zap/
+ sudo mkdir -p /zap/wrk
+ cp zap_rules /zap/wrk/
  sudo mkdir -p /tmp/owasp-zap-report
  sudo mv /tmp/zap_report.html /tmp/owasp-zap-report
 
