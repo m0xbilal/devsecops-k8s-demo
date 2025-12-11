@@ -138,15 +138,55 @@ stage('K8S Deployment - DEV') {
 
 stage('Reload Library') {
     steps {
-        library 'slack@main'
+        def call(String buildStatus = 'STARTED') {
+ buildStatus = buildStatus ?: 'SUCCESS'
+
+ def color
+
+ if (buildStatus == 'SUCCESS') {
+  color = '#47ec05'
+  emoji = ':ww:'
+ } else if (buildStatus == 'UNSTABLE') {
+  color = '#d5ee0d'
+  emoji = ':deadpool:'
+ } else {
+  color = '#ec2805'	
+  emoji = ':hulk:'
+ }
+
+ def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}"
+
+slackSend(channel: '#jenkins', color: color, message: msg)
     }
 }
 }
-	post {
-	always {
-sendNotification currentBuild.result
-// publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, icon: '', keepAll: true, reportDir: '/tmp/owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'HTML Report', 
-// reportTitles: '', useWrapperFileDirectly: true])
-}
+post {
+    always {
+        script {
+            def buildStatus = currentBuild.currentResult ?: 'SUCCESS'
+            def color
+            def emoji
+
+            if (buildStatus == 'SUCCESS') {
+                color = '#47ec05'
+                emoji = ':white_check_mark:'
+            } else if (buildStatus == 'UNSTABLE') {
+                color = '#d5ee0d'
+                emoji = ':warning:'
+            } else {
+                color = '#ec2805'
+                emoji = ':x:'
+            }
+
+            def msg = "${emoji} *${buildStatus}*: `${env.JOB_NAME}` #${env.BUILD_NUMBER}\n${env.BUILD_URL}"
+
+            slackSend(
+                channel: '#jenkins',
+                color: color,
+                message: msg
+            )
+        }
     }
+}
+
 }
